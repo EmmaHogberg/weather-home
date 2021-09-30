@@ -1,63 +1,51 @@
 package com.emma.weatherhome;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
-
-import org.json.simple.parser.JSONParser;
-
-import java.net.URL;
-import java.util.Scanner;
-
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 
 public class OpenWeatherApi {
 
-    public static void getWeatherForHome(String home) throws IOException {
+    public static OpenWeatherBean getWeatherForHome(String location) throws IOException, ParseException {
 
-
-        // Variabler
+        // Variables
         String apiEndPoint = "http://api.openweathermap.org/data/2.5/weather?";
         String locationParam = "q=";
         String units = "units=metric";
         String apiKeyParam = "appid=";
         String paramDivider = "&";
-        String apiKey = ConfigGateway.getOpenWeatherKey(); // TODO Är det onödigt att skapa key två gånger?
+        String apiKey = ConfigGateway.getOpenWeatherKey();
+        OpenWeatherBean weatherBean = new OpenWeatherBean();
 
         // Build URL
-        StringBuilder urlString = new StringBuilder();
-        urlString.append(apiEndPoint);
-        urlString.append(locationParam);
-        urlString.append(home);
-        urlString.append(paramDivider);
-        urlString.append(units);
-        urlString.append(paramDivider);
-        urlString.append(apiKeyParam);
-        urlString.append(apiKey);
+        String urlString = apiEndPoint +
+                locationParam +
+                location +
+                paramDivider +
+                units +
+                paramDivider +
+                apiKeyParam +
+                apiKey;
 
         // Request
-        URL url = new URL(urlString.toString());
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
-        conn.connect();
-        int responseCode = conn.getResponseCode();
+        JSONObject jsonData = RequestHelper.getJsonFromApi(urlString);
 
-        System.out.println(url);
+        // Get object "main" and get the parameter "temp" from it
+        JSONObject mainJson = (JSONObject) jsonData.get("main");
+        String temp = mainJson.get("temp").toString();
+        weatherBean.setOutdoorTemp(temp);
+        System.out.println("Outdoor temp: " + temp);
 
-        if (responseCode != 200) {
-            throw new RuntimeException("HttpResponseCode: " + responseCode);
-        } else {
-            Scanner scanner = new Scanner(url.openStream());
-            StringBuilder inline = new StringBuilder();
-            while (scanner.hasNext()) {
-                inline.append(scanner.nextLine());
-            }
-            System.out.println(inline);
+        // Get main weather and weather description
+        JSONArray jsonWeatherArray = (JSONArray) jsonData.get("weather");
+        JSONObject obj = (JSONObject) jsonWeatherArray.get(0);
+        String mainWeather = (String) obj.get("main");
+        weatherBean.setMainWeather(mainWeather);
+        String description = (String) obj.get("description");
+        weatherBean.setWeatherDescription(description);
+        System.out.println("Weather: " + mainWeather + " - " + description);
 
-        }
-        System.out.println(conn.getResponseCode() + " " + conn.getResponseMessage());
-        conn.disconnect();
+        return weatherBean;
     }
-
-
-
-
 }

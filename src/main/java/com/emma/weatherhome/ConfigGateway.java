@@ -9,6 +9,7 @@ import java.io.Reader;
 
 public class ConfigGateway {
 
+    // Method to get the Open Weather key from local document "ConfigKeys.json"
     public static String getOpenWeatherKey() {
         JSONParser parser = new JSONParser();
         String key = "";
@@ -23,8 +24,7 @@ public class ConfigGateway {
         } return key;
     }
 
-
-
+    // Method to get the Philips Hue username from local document "ConfigKeys.json"
     public static String getHueUser() {
 
         JSONParser parser = new JSONParser();
@@ -38,7 +38,5 @@ public class ConfigGateway {
         } catch (IOException | ParseException e) {
             e.printStackTrace();
         } return user;
-
-
     }
 }

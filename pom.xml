@@ -101,7 +101,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.emma.weatherhome/com.emma.weatherhome.Main</mainClass>
+                            <mainClass>com.emma.weatherhome/com.emma.weatherhome.Controller</mainClass>
                         </configuration>
                     </execution>
                 </executions>
