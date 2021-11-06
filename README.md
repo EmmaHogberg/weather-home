@@ -1,5 +1,7 @@
 # weather-home
-App for using Open Weather api to control and customize smart appliances and lamps in the home
+App for using Open Weather api to control and customize smart appliances and lamps in the home, focus on backend and Internet of Things
+
+![Weather app](https://user-images.githubusercontent.com/70634183/140627094-9e153416-676a-43a1-a798-2733e70fbfcc.jpg)
 
 ## I slutprojekt: 
 “Ett avancerat projekt i Iot”, så ska ni planera och leverera
